@@ -10,10 +10,10 @@ console.log(time);
 //dynamic questions to display & correct answer for each question
 const questionAnswer = [
     {
-    "sequence": 1,
-    "question": "Which Bruce Lee movie also stared Chuck Norris?",
-    "possibleAnswers": ["I am Bruce Lee", "The Way of the Dragon", "Fist of Fury", " Enter the Dragon"],
-    "correctAnswer": "The Way of the Dragon"
+    sequence: 1,
+    question: "Which Bruce Lee movie also stared Chuck Norris?",
+    possibleAnswers: ["I am Bruce Lee", "The Way of the Dragon", "Fist of Fury", " Enter the Dragon"],
+    correctAnswer: "The Way of the Dragon"
     },
     {
     sequence: 2,
@@ -70,19 +70,23 @@ function timeConverter(t) {
 //start game
     $("#start").click(function() {
 
+        // var questionContent = Object.values(questionAnswer.question)[questionAnswer.currentSet];
+        // $(".question").text(questionContent);
         //loop through each quesetion from the array of questions  
         for (i=0; i < questionAnswer.length; i++) {
-        console.log(questionAnswer[i]);
-        const triviaQuestions = $.makeArray(questionAnswer);
+        console.log(questionAnswer[i].question);
+        console.log(questionAnswer[i].possibleAnswers);
+        // const triviaQuestions = $.makeArray(questionAnswer);
         //display the question and possible answers with radio button
-        $(".question").text(questionAnswer.question);
-        $(":radio").map(triviaQuestions, function(val, i) {
+        $(".question").text(questionAnswer[i].question);
+        $("#a").map(questionAnswer[i].possibleAnswers, function(val, i) {
             console.log(triviaQuestion[i]);
+            startTimer();
         });
         //start timer for that question
         
     }
-    });
+ });
 
 //onclick determine if the user selected the correct answer && stop timer
 //display whether the player got the question right or wrong
