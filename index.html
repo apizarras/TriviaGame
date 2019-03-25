@@ -18,21 +18,28 @@
         </div>
     </div>
 
-    <div class="row mt-5 rounded border-white">
+    <div class="text-right" id="display">00:00</div>
+    <form class="row mt-5" id="quiz">
         <div class="col-6"></div>
-        <div id="timer"></div>
-        <p class="col-6 text-center">Question 1</p>
-        
-    </div>
+        <button id="start">Start</button>
+        <div class="question">Placeholder for Question?</div> 
+        <input type="radio" name="answers" value="a"> <br>
+        <input type="radio" name="answers" value="b"> <br>
+        <input type="radio" name="answers" value="c"> <br>
+        <input type="radio" name="answers" value="d"> <br>
+        <input type="submit" value="Submit">
+    </form>
+
     <div class="row">
         <div class="col-6"></div>
-        <p class="col-6 text-center">Radio Button Answer Options</p>
+        <button class="col-3 mt-5 next">Next</button>
+        <button class="col-3 mt-5 restart">Restart</button>
     </div>
-
-    <button class="next">Next</button>
-    <button class="restart">Restart</button>
 </div>
-<!-- </div> -->
+    <script
+  src="http://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
     <script src="./assets/javascript/app.js"></script>
 </body>
 </html>
