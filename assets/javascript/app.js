@@ -1,35 +1,37 @@
 $(document).ready();
 
-let correct = 0;
+let correctCount = 0;
 let clockRunning = false;
-let time = 120;
+let time = 60;
 console.log(time);
+
+const questions = $(".question");
+const submit = $("submit");
 
 //start trivia game
 
 //dynamic questions to display & correct answer for each question
 const questionAnswer = [
     {
-    sequence: 1,
     question: "Which Bruce Lee movie also stared Chuck Norris?",
-    possibleAnswers: ["I am Bruce Lee", "The Way of the Dragon", "Fist of Fury", " Enter the Dragon"],
-    correctAnswer: "The Way of the Dragon"
+    possibleAnswers: {
+        a: "I am Bruce Lee", 
+        b: "The Way of the Dragon", 
+        c: "Fist of Fury", 
+        d: " Enter the Dragon"},
+    correctAnswer: "b"
     },
     {
-    sequence: 2,
     question: "Which Bruce Lee movie also stared Kareem Abdul-Jabbar?",
     possibleAnswers: ["The Big Boss", "Ironside", "Game of Death", "The Green Hornet"],
     correctAnswer: "Game of Death"
     },
     {
-    sequence: 3,
     question: "What martial arts movie has won an Oscar?",
     possibleAnswers: ["Crouching Tiger, Hidden Dragon", "Ip Man", "Kill Bill Vol. 1", "Kung Fu Panda"],
     correctAnswer: "Crouching Tiger, Hidden Dragon"
     }
 ]
-
-
 
 function reset() {
     time = 0;
@@ -68,25 +70,32 @@ function timeConverter(t) {
   }
 
 //start game
-    $("#start").click(function() {
+$("#start").click(function() {
+    // let hasAnswer = false;
 
-        // var questionContent = Object.values(questionAnswer.question)[questionAnswer.currentSet];
-        // $(".question").text(questionContent);
-        //loop through each quesetion from the array of questions  
+    //loop through each quesetion from the array of questions
+    // if(!hasAnswer){
         for (i=0; i < questionAnswer.length; i++) {
+        startTimer();
         console.log(questionAnswer[i].question);
         console.log(questionAnswer[i].possibleAnswers);
-        // const triviaQuestions = $.makeArray(questionAnswer);
-        //display the question and possible answers with radio button
-        $(".question").text(questionAnswer[i].question);
-        $("#a").map(questionAnswer[i].possibleAnswers, function(val, i) {
-            console.log(triviaQuestion[i]);
-            startTimer();
-        });
-        //start timer for that question
-        
-    }
- });
+    //display the question and possible answers with radio button
+        $("#question").text(questionAnswer[i].question);
+
+        console.log(time);
+        if(time > 0) {
+            //wait for the player to click on a radio button or wait for the time to run out
+            break;
+        } else if (time === 0) {
+            hasAnswer = false;
+            console.log("Time is Out!!!");
+        }
+    // }
+    };
+    //start timer for that question
+    
+})
+
 
 //onclick determine if the user selected the correct answer && stop timer
 //display whether the player got the question right or wrong
@@ -100,4 +109,3 @@ function timeConverter(t) {
     //include reset of all variables
 
     //this ends the start function
-//});
