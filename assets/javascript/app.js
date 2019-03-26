@@ -3,8 +3,9 @@ $(document).ready();
 let correctCount = 0;
 let clockRunning = false;
 let time = 60;
+let hasAnswer = false;
 console.log(time);
-
+count();
 const questions = $(".question");
 const submit = $("submit");
 
@@ -34,16 +35,19 @@ const questionAnswer = [
 ]
 
 function reset() {
-    time = 0;
-    $("display").text("01:30");
+    time = 60;
+    $("display").text("01:00");
 }
 
 function startTimer () {
     if(!clockRunning) {
         intervalId = setInterval(count, 1000);
         clockRunning = true;
+    } else if (time === 0 ) {
+        clockRunning = true;
     }
 }
+
 
 function count() {
     time--;
@@ -69,37 +73,67 @@ function timeConverter(t) {
     return minutes + ":" + seconds;
   }
 
+function next() {
+    hasAnswer = true;
+    //compare to see if the player's answer is correct
+    //if correct then increment the correctCount
+    var radioValue = $("input[name='answers']:checked").val();
+    if(radioValue = questionAnswer.correctAnswer) {
+        console.log(questionAnswer.correctAnswer);
+        correctCount++;
+    }
+}
+
+// function letPlayerAnswer () {
+//     if(time === 0) {
+//         next();
+//     console.log(time);
+// } else if (hasAnswer) {
+//     //check if answer is correct and then add to correct answer count
+//     correctCount++;
+// }
+// };
+
 //start game
 $("#start").click(function() {
-    // let hasAnswer = false;
-
-    //loop through each quesetion from the array of questions
-    // if(!hasAnswer){
-        for (i=0; i < questionAnswer.length; i++) {
-        startTimer();
+    //loop through each question from the array of questions
+        for (i=0; i<questionAnswer.length; i++) {
+        if (time === 0) {
+            next();
+        } else {
         console.log(questionAnswer[i].question);
         console.log(questionAnswer[i].possibleAnswers);
-    //display the question and possible answers with radio button
+         //start timer for that question
+            startTimer();
+        //display the question and possible answers with radio button
         $("#question").text(questionAnswer[i].question);
-
-        console.log(time);
-        if(time > 0) {
-            //wait for the player to click on a radio button or wait for the time to run out
-            break;
-        } else if (time === 0) {
-            hasAnswer = false;
-            console.log("Time is Out!!!");
+            for(j=0; j<questionAnswer[i].possibleAnswers.length; j++) {
+        $("#answers").html('<input type="radio" name="answer">' + questionAnswer[i].possibleAnswers[j] + '</input>');
         }
-    // }
-    };
-    //start timer for that question
-    
-})
+        //determine if user has answer the question and if not allow the timer to con't running down
+                // letPlayerAnswer();
+                // setInterval(letPlayerAnswer, 1000);
+        // console.log("player has picked an answer");
+
+        } 
+       //on click should go back into the loop for the next question and timer reset
+        $("#next").click(function() {
+            console.log("Next clicked");
+            next();
+        });
+        
+           
+        console.log(correctCount);
+    }
+
+        //stop timer and move to the next question
+  
+});
 
 
 //onclick determine if the user selected the correct answer && stop timer
 //display whether the player got the question right or wrong
-//if correct then add to the count of correct answers && call pause functin && display next question
+//if correct then add to the count of correct answers && call pause function && display next question
 
 //function for pause before displaying the next question
 //window.setTimeout(out-your-function-here, milliseconds-here)
