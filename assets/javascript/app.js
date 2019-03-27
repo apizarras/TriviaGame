@@ -2,22 +2,18 @@ $(document).ready(function() {
 
 let correctCount = 0;
 let clockRunning = false;
-let time = 60;
+let time = 10;
 let hasAnswer = false;
 let questionCounter = 0;
 console.log(time);
-count();
-// const questions = $(".question");
-// const submit = $("submit");
-
-//start trivia game
+reset();
 
 //dynamic questions to display & correct answer for each question
 const questionAnswer = [
     {
     question: "Which Bruce Lee movie also stared Chuck Norris?",
     possibleAnswers: ["I am Bruce Lee", "The Way of the Dragon", "Fist of Fury", "Enter the Dragon"],
-    correctAnswer: "b"
+    correctAnswer: "The Way of the Dragon"
     },
     {
     question: "Which Bruce Lee movie also stared Kareem Abdul-Jabbar?",
@@ -30,29 +26,37 @@ const questionAnswer = [
     correctAnswer: "Crouching Tiger, Hidden Dragon"
     }
 ]
-
+//function to restart the game
+    //include reset of all variables
 function reset() {
-    time = 60;
-    $("display").text("01:00");
+    time = 10;
+    $("#display").text("01:00");
+    if(questionCounter > 2) {
+        questionCounter = 0;
+    }
 }
 
-function startTimer () {
+function startTimer() {
     if(!clockRunning) {
         //setTimeout instead of setInterval
         intervalId = setInterval(count, 1000);
         clockRunning = true;
     } else if (time === 0 ) {
-        clockRunning = true;
+        clockRunning = false;
     }
-}
+};
 
 
 function count() {
+    if(time ===0) {
+        $("#display").text("00:00");
+    } else {
     time--;
     const converted = timeConverter(time);
     console.log(converted);
     $("#display").text(converted);
 }
+};
 
 function timeConverter(t) {
     var minutes = Math.floor(t / 60);
@@ -69,38 +73,31 @@ function timeConverter(t) {
     }
   
     return minutes + ":" + seconds;
-  }
+  };
 
 function next() {
-    hasAnswer = true;
+    // hasAnswer = true;
     //compare to see if the player's answer is correct
     //if correct then increment the correctCount
-    var radioValue = $("input[name='answers']:checked").val();
+    var radioValue = $("input[name='answer']:checked").val();
+    console.log("radioValue is " + radioValue);
     if(radioValue = questionAnswer.correctAnswer) {
-        console.log(radioValue);
         correctCount++;
+        console.log("Num correct answers " + correctCount);
     }
-}
+};
 
-// function letPlayerAnswer () {
-//     if(time === 0) {
-//         next();
-//     console.log(time);
-// } else if (hasAnswer) {
-//     //check if answer is correct and then add to correct answer count
-//     correctCount++;
-// }
-// };
-
+//display question and answers
 function displayQuestion() { 
 
     $("#question").text(questionAnswer[questionCounter].question);
     for(j=0; j<questionAnswer[questionCounter].possibleAnswers.length; j++) {
         
-    $("#answers").append('<input type="radio" name="answer">' + questionAnswer[questionCounter].possibleAnswers[j] + '</input>');
+    $("#answers").append('<input type="radio" name="answer" value=(questionAnswer[questionCounter].correctAnswer)>' + questionAnswer[questionCounter].possibleAnswers[j] + '</input><br><br>');
     }
     console.log(questionAnswer[questionCounter].question);
     console.log(questionAnswer[questionCounter].possibleAnswers);
+    console.log("this is correct answer" + questionAnswer[questionCounter].correctAnswer);
     console.log(questionCounter);
     };
 
@@ -110,44 +107,18 @@ function displayQuestion() {
         startTimer()
         displayQuestion();
     });
-
+//move to next question and restart the timer
     $("#next").click(function() {
         console.log("Next clicked");
+        next();
         questionCounter++;
         $("#answers").empty();
         console.log(questionCounter);
         displayQuestion();
         console.log(correctCount);
-
+        reset();
+        console.log(time);
     });
-    //loop through each question from the array of questions
-    //should create function to display the question and answer
-    
-            //call that function within the startTimer
-        //display the question and possible answers with radio button
-
-        //determine if user has answer the question and if not allow the timer to con't running down
-                // letPlayerAnswer();
-                // setInterval(letPlayerAnswer, 1000);
-        // console.log("player has picked an answer");
-
-       //on click should go back into the loop for the next question and timer reset
-        
-        
-
-
-        //stop timer and move to the next question
-
-//onclick determine if the user selected the correct answer && stop timer
-//display whether the player got the question right or wrong
-//if correct then add to the count of correct answers && call pause function && display next question
-
-//function for pause before displaying the next question
-//window.setTimeout(out-your-function-here, milliseconds-here)
-
-
-//button with function to restart the game
-    //include reset of all variables
 
     //this ends the document ready function
-})
+});
