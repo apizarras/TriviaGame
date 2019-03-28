@@ -1,8 +1,10 @@
 $(document).ready(function() {
 
 let correctCount = 0;
+let incorrectCount = 0;
 let clockRunning = false;
-let time = 10;
+let time = 15;
+let currentTime = 15;
 // let hasAnswer = false;
 let questionCounter = 0;
 console.log(time);
@@ -39,8 +41,8 @@ const questionAnswer = [
 //function to restart the game
     //include reset of all variables
 function reset() {
-    time = 10;
-    $("#display").text("00:10");
+    time = 15;
+    $("#display").text("00:15");
     $("#question").empty();
     $("#answers").empty();
     $("#results").empty();
@@ -108,6 +110,7 @@ function next() {
         $("#question").text("You are correct!!!");
     } else {
         $("#question").text("You picked the wrong answer. The correct answer is " + questionAnswer[questionCounter].correctAnswer);
+        incorrectCount++;
     }
 };
 
@@ -124,33 +127,19 @@ function displayQuestion() {
     console.log(questionAnswer[questionCounter].possibleAnswers);
     console.log("this is correct answer" + questionAnswer[questionCounter].correctAnswer);
     console.log(questionCounter);
-    checkTime();
     };
 
     function results() {
-        $("#results").append("'<p>You have completed the quiz! <br> Total Correct Answers: '" + correctCount + "'</p>'");
+        $("#results").append("'<p>You have completed the quiz! <br> Total Correct Answers: '" + correctCount + "'</p> <br> <p>Total Incorrect Answers: '" + incorrectCount);
         $("#question").empty();
         $("#answers").empty();
     }
 
     function checkTime() {
+        var currentTime = time;
         console.log(time);
     }
-
-//start game
-$("#restart").click(function() {
-    reset();
-    resetQCount();
-    displayQuestion();
-});
-
-    $("#start").click(function() {
-        reset();
-        startTimer()
-        displayQuestion();
-    });
-//move to next question and restart the timer
-    $("#next").click(function() {
+    function next2() {
         next();
         questionCounter++;
         if(questionCounter > 5) {
@@ -166,7 +155,28 @@ $("#restart").click(function() {
         setTimeout(displayQuestion, 5000);
         console.log(correctCount);
         console.log(time);
+            }
         }
+//start game
+$("#restart").click(function() {
+    reset();
+    resetQCount();
+    displayQuestion();
+});
+
+    $("#start").click(function() {
+        reset();
+        startTimer()
+        displayQuestion();
+        setInterval(checkTime, 1000)
+            if (currentTime < 1) {
+                next2();
+            }
+    });
+//move to next question and restart the timer
+    $("#next").click(function() {
+
+        next2();
     });
 
     //this ends the document ready function
