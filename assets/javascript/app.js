@@ -139,6 +139,7 @@ function displayQuestion() {
         var currentTime = time;
         console.log(time);
     }
+    //realize this seems a little convoluted, but I ran out of time to clean up the two next functions
     function next2() {
         next();
         questionCounter++;
@@ -168,15 +169,15 @@ $("#restart").click(function() {
         reset();
         startTimer()
         displayQuestion();
+        //attempt to move to next question when time runs out
         setInterval(checkTime, 1000)
-            if (currentTime < 1) {
+            if (seconds < 1) {
                 next2();
             }
     });
 //move to next question and restart the timer
     $("#next").click(function() {
-
-        next2();
+    next2();
     });
 
     //this ends the document ready function
