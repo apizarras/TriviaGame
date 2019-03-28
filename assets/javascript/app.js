@@ -3,7 +3,7 @@ $(document).ready(function() {
 let correctCount = 0;
 let clockRunning = false;
 let time = 10;
-let hasAnswer = false;
+// let hasAnswer = false;
 let questionCounter = 0;
 console.log(time);
 reset();
@@ -24,16 +24,27 @@ const questionAnswer = [
     question: "What martial arts movie has won an Oscar?",
     possibleAnswers: ["Crouching Tiger, Hidden Dragon", "Ip Man", "Kill Bill Vol. 1", "Kung Fu Panda"],
     correctAnswer: "Crouching Tiger, Hidden Dragon"
+    },
+    {
+    question: "In which movie did Jet Li make his Hollywood debut?",
+    possibleAnswers: ["Rush Hour", "Romeo Must Die", "Lethal Weapon 4", "Hard Target"],
+    correctAnswer: "Lethal Weapon 4"
+    },
+    {
+    question: "What was the primary martial arts style studied by Keanu Reeves for The Matrix?",
+    possibleAnswers: ["Tai Chi", "Kung Fu", "Jiu Jitsu", "Muay Thai"],
+    correctAnswer: "Kung Fu"
     }
 ]
 //function to restart the game
     //include reset of all variables
 function reset() {
     time = 10;
-    $("#display").text("01:00");
-    if(questionCounter > 2) {
-        questionCounter = 0;
-    }
+    $("#display").text("00:30");
+    $("#question").empty();
+    $("#answers").empty();
+    questionCounter = 0;
+
 }
 
 function startTimer() {
@@ -76,12 +87,12 @@ function timeConverter(t) {
   };
 
 function next() {
-    // hasAnswer = true;
     //compare to see if the player's answer is correct
     //if correct then increment the correctCount
     var radioValue = $("input[name='answer']:checked").val();
     console.log("radioValue is " + radioValue);
-    if(radioValue = questionAnswer.correctAnswer) {
+    console.log("Is this correct?" + questionAnswer[questionCounter].correctAnswer);
+    if(radioValue = questionAnswer[questionCounter].correctAnswer) {
         correctCount++;
         console.log("Num correct answers " + correctCount);
     }
@@ -89,11 +100,11 @@ function next() {
 
 //display question and answers
 function displayQuestion() { 
-
     $("#question").text(questionAnswer[questionCounter].question);
     for(j=0; j<questionAnswer[questionCounter].possibleAnswers.length; j++) {
-        
-    $("#answers").append('<input type="radio" name="answer" value=(questionAnswer[questionCounter].correctAnswer)>' + questionAnswer[questionCounter].possibleAnswers[j] + '</input><br><br>');
+        //couldn't get the radio buttons with the possibleAnswer text and the radio button values to generate in one line of code, so I had to use the following, would love feedback on how I could've done this better
+    $("#answers").append('<input type="radio" name="answer" value="' + questionAnswer[questionCounter].possibleAnswers[j] + '">');
+    $("#answers").append(questionAnswer[questionCounter].possibleAnswers[j] + "<br><br>");
     }
     console.log(questionAnswer[questionCounter].question);
     console.log(questionAnswer[questionCounter].possibleAnswers);
@@ -102,6 +113,12 @@ function displayQuestion() {
     };
 
 //start game
+$("#restart").click(function() {
+    reset();
+
+    displayQuestion();
+});
+
     $("#start").click(function() {
         //start timer for that question
         startTimer()
@@ -109,6 +126,9 @@ function displayQuestion() {
     });
 //move to next question and restart the timer
     $("#next").click(function() {
+        if(questionCounter >= 5) {
+            //call on results function
+        }
         console.log("Next clicked");
         next();
         questionCounter++;
@@ -116,7 +136,7 @@ function displayQuestion() {
         console.log(questionCounter);
         displayQuestion();
         console.log(correctCount);
-        reset();
+        // reset();
         console.log(time);
     });
 
