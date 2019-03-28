@@ -43,6 +43,7 @@ function reset() {
     $("#display").text("00:30");
     $("#question").empty();
     $("#answers").empty();
+    $("#results").empty();
     questionCounter = 0;
 
 }
@@ -92,7 +93,7 @@ function next() {
     var radioValue = $("input[name='answer']:checked").val();
     console.log("radioValue is " + radioValue);
     console.log("Is this correct?" + questionAnswer[questionCounter].correctAnswer);
-    if(radioValue = questionAnswer[questionCounter].correctAnswer) {
+    if(radioValue == questionAnswer[questionCounter].correctAnswer) {
         correctCount++;
         console.log("Num correct answers " + correctCount);
     }
@@ -112,26 +113,34 @@ function displayQuestion() {
     console.log(questionCounter);
     };
 
+    function results() {
+        $("#results").append("'<p>You have completed the quiz! <br> Total Correct Answers: '" + correctCount + "'</p>'")
+    }
+
 //start game
 $("#restart").click(function() {
     reset();
-
     displayQuestion();
 });
 
     $("#start").click(function() {
-        //start timer for that question
+        $("#results").empty();
+        $("#answers").empty();
         startTimer()
         displayQuestion();
     });
 //move to next question and restart the timer
     $("#next").click(function() {
-        if(questionCounter >= 5) {
-            //call on results function
-        }
-        console.log("Next clicked");
         next();
         questionCounter++;
+        if(questionCounter > 5) {
+            ("#results").text("You must click the Start button to play again");
+            reset();
+            $("#answers").empty();
+        } else if(questionCounter === 5) {
+            results();
+        }
+        console.log("Next clicked");
         $("#answers").empty();
         console.log(questionCounter);
         displayQuestion();
