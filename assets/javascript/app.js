@@ -40,12 +40,13 @@ const questionAnswer = [
     //include reset of all variables
 function reset() {
     time = 10;
-    $("#display").text("00:30");
+    $("#display").text("00:10");
     $("#question").empty();
     $("#answers").empty();
     $("#results").empty();
+}
+function resetQCount () {
     questionCounter = 0;
-
 }
 
 function startTimer() {
@@ -60,7 +61,7 @@ function startTimer() {
 
 
 function count() {
-    if(time ===0) {
+    if(time === 0) {
         $("#display").text("00:00");
     } else {
     time--;
@@ -87,20 +88,32 @@ function timeConverter(t) {
     return minutes + ":" + seconds;
   };
 
+  function stop() {
+    clearInterval(intervalId);
+    clockRunning = false;
+    time = 15;
+    $("#display").empty();
+  }
+
 function next() {
     //compare to see if the player's answer is correct
     //if correct then increment the correctCount
+    stop();
     var radioValue = $("input[name='answer']:checked").val();
     console.log("radioValue is " + radioValue);
     console.log("Is this correct?" + questionAnswer[questionCounter].correctAnswer);
     if(radioValue == questionAnswer[questionCounter].correctAnswer) {
         correctCount++;
         console.log("Num correct answers " + correctCount);
+        $("#question").text("You are correct!!!");
+    } else {
+        $("#question").text("You picked the wrong answer. The correct answer is " + questionAnswer[questionCounter].correctAnswer);
     }
 };
 
 //display question and answers
 function displayQuestion() { 
+    startTimer();
     $("#question").text(questionAnswer[questionCounter].question);
     for(j=0; j<questionAnswer[questionCounter].possibleAnswers.length; j++) {
         //couldn't get the radio buttons with the possibleAnswer text and the radio button values to generate in one line of code, so I had to use the following, would love feedback on how I could've done this better
@@ -111,21 +124,28 @@ function displayQuestion() {
     console.log(questionAnswer[questionCounter].possibleAnswers);
     console.log("this is correct answer" + questionAnswer[questionCounter].correctAnswer);
     console.log(questionCounter);
+    checkTime();
     };
 
     function results() {
-        $("#results").append("'<p>You have completed the quiz! <br> Total Correct Answers: '" + correctCount + "'</p>'")
+        $("#results").append("'<p>You have completed the quiz! <br> Total Correct Answers: '" + correctCount + "'</p>'");
+        $("#question").empty();
+        $("#answers").empty();
+    }
+
+    function checkTime() {
+        console.log(time);
     }
 
 //start game
 $("#restart").click(function() {
     reset();
+    resetQCount();
     displayQuestion();
 });
 
     $("#start").click(function() {
-        $("#results").empty();
-        $("#answers").empty();
+        reset();
         startTimer()
         displayQuestion();
     });
@@ -139,14 +159,14 @@ $("#restart").click(function() {
             $("#answers").empty();
         } else if(questionCounter === 5) {
             results();
-        }
+        }else if(questionCounter < 5) {
         console.log("Next clicked");
         $("#answers").empty();
         console.log(questionCounter);
-        displayQuestion();
+        setTimeout(displayQuestion, 5000);
         console.log(correctCount);
-        // reset();
         console.log(time);
+        }
     });
 
     //this ends the document ready function
